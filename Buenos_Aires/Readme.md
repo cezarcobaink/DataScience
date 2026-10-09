@@ -18,3 +18,18 @@
 - A inflação alta na Argentina reduz a confiabilidade de comparações de preço ao longo do tempo.
 
 **Stack:** Python · pandas · Matplotlib · Seaborn
+
+## O que explica o preço? (`Modelo_de_preco.ipynb`)
+
+Validação cruzada (5 folds) com 30.760 anúncios limpos, comparando com uma regra simples (mediana por bairro e tipo):
+
+| Abordagem | R² (log do preço) | Erro absoluto médio |
+|---|---|---|
+| Regra: mediana bairro + tipo | 0,18 | ARS 10.178 |
+| Regressão linear | 0,21 | ARS 10.046 |
+| Gradient boosting | **0,31** | **ARS 9.361** (−8%) |
+
+- **2,6% dos anfitriões** concentram **29,5% dos anúncios**.
+- Quarto privativo sai **~41% mais barato** que o imóvel inteiro, mantendo o resto constante; cada km do Obelisco tira ~1%.
+- ~15% dos anúncios estão 30%+ abaixo do preço estimado: candidatos a revisão de preço.
+- Limite: sem fotos, comodidades e texto das avaliações, o preço é só parcialmente previsível.

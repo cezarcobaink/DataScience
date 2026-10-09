@@ -44,3 +44,15 @@ jupyter notebook Deteccao_fraude_CC.ipynb
 ```
 
 **Stack:** Python · pandas · scikit-learn · imbalanced-learn · Matplotlib · Seaborn
+
+## Qual limiar custa menos? (`Custo_do_limiar.ipynb`)
+
+Divisão **temporal** (treino 60% · validação 10% · teste 30%), limiar escolhido na validação, e custo explícito: fraude perdida custa o valor da transação; cada alerta custa €5 de análise (premissa).
+
+| Modelo | ROC-AUC | Alertas no teste | Fraudes pegas | Precisão | Perda evitada |
+|---|---|---|---|---|---|
+| Regressão logística, limiar 0,5 | 0,977 | 2.425 | — | 4% | custa mais que não ter modelo |
+| Regressão logística, limiar ótimo | 0,977 | 463 | 86% | 20% | 67% |
+| Gradient boosting, limiar ótimo | 0,984 | 106 | 77% | 78% | **79%** |
+
+Lição: AUC alto não paga a conta — o limiar precisa ser escolhido pelo custo do erro.
