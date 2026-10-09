@@ -25,3 +25,15 @@
 Retornos diários (`pct_change`), contagem de dias de alta e baixa volatilidade, correlação de Pearson entre preços e entre retornos, heatmaps e pairplots.
 
 **Stack:** Python · pandas · yfinance · Matplotlib · Seaborn
+
+## Correlação dos retornos diários com o Ibovespa
+
+| Mercado | Correlação |
+|---|---|
+| EUA (S&P 500) | 0,61 |
+| Europa (Euro Stoxx 50) | 0,46 |
+| Bitcoin | 0,32 |
+| Japão (Nikkei) | 0,14 |
+| China (Xangai) | 0,10 |
+
+Para quem já tem Ibovespa, EUA e Europa protegem menos do que parece. A correlação baixa de Japão e China é em parte efeito de fuso horário: os pregões não coincidem, e retornos diários subestimam a relação. Retornos semanais seriam a comparação mais justa (próximo passo).
