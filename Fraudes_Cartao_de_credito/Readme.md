@@ -1,38 +1,46 @@
-# Fraudes_Cartao_de_credito
+# Detecção de fraude em cartões de crédito
 
-Este é um projeto para detectar fraudes em cartões de crédito.
+**Problema:** identificar transações fraudulentas em uma base onde a fraude é rara — apenas **0,17%** das 284.807 transações ([Credit Card Fraud Detection, Kaggle](https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud)).
 
-## Descrição
+Com classes tão desbalanceadas, a acurácia engana: um modelo que diz "nunca é fraude" acerta 99,8%. Por isso o foco está em **recall** (quantas fraudes o modelo pega), **precisão** (quantos alertas são fraude de fato) e **ROC-AUC**.
 
-O objetivo deste projeto é desenvolver um sistema de detecção de fraudes em transações de cartões de crédito. Serão utilizadas técnicas de aprendizado de máquina para identificar padrões suspeitos e alertar os usuários sobre possíveis atividades fraudulentas.
+## Como foi feito
 
-## Funcionalidades
+1. **Análise exploratória** de valor e horário das transações, separando fraudes e transações normais.
+2. **Separação de um conjunto de teste** (15% da base) antes de qualquer balanceamento, para avaliar o modelo em dados que ele nunca viu.
+3. **Duas estratégias de balanceamento** no treino:
+   - *Undersampling* baseado em clusters (K-Means) — reduz o treino a 710 exemplos balanceados.
+   - *SMOTE* — gera exemplos sintéticos da classe minoritária.
+4. **Dois modelos** para cada estratégia: árvore de decisão e regressão logística.
 
-- Análise de transações em tempo real
-- Detecção de padrões suspeitos
-- Geração de relatórios de atividades fraudulentas
+## Resultados (validação)
 
-## Instalação
+| Modelo | Balanceamento | Recall (fraude) | Precisão (fraude) | ROC-AUC |
+|---|---|---|---|---|
+| Árvore de decisão | Undersampling | 96,8% | 0,4% | 0,79 |
+| Árvore de decisão | SMOTE | 76,2% | 38,1% | 0,88 |
+| Regressão logística | Undersampling | 88,9% | 4,2% | 0,93 |
+| Regressão logística | SMOTE | 87,3% | 5,7% | 0,92 |
 
-1. Clone este repositório.
-2. Instale as dependências usando o comando `npm install`.
-3. Configure as variáveis de ambiente necessárias.
-4. Execute o comando `npm start` para iniciar o sistema.
+No **conjunto de teste reservado**, a regressão logística chegou a **ROC-AUC de 0,95 (undersampling) e 0,96 (SMOTE)**.
 
-## Execução
+## O que os números mostram
 
-Para executar o sistema, siga os passos abaixo:
+- Existe um **trade-off claro**: pegar quase todas as fraudes custa muitos alarmes falsos. A árvore com undersampling detecta 96,8% das fraudes, mas 99,6% dos seus alertas são falsos.
+- A **árvore com SMOTE** tem o melhor equilíbrio entre recall e precisão (F1 de 0,51).
+- A escolha final depende do custo do negócio: quanto custa uma fraude que passa, comparado a bloquear um cliente legítimo.
 
-1. Certifique-se de ter todas as dependências instaladas corretamente.
-2. Abra o terminal e navegue até o diretório raiz do projeto.
-3. Execute o comando `npm start` para iniciar o sistema.
-4. Aguarde até que o sistema esteja totalmente inicializado.
+## Próximos passos
 
-## Contribuição
+- Ajustar o limiar de decisão com base em uma curva precisão-recall e em custos reais.
+- Testar modelos de gradient boosting (XGBoost, LightGBM).
 
-Contribuições são bem-vindas! Sinta-se à vontade para abrir uma issue ou enviar um pull request.
+## Como rodar
 
-## Licença
+```bash
+pip install -r requirements.txt
+unzip creditcard.zip
+jupyter notebook Deteccao_fraude_CC.ipynb
+```
 
-Este projeto está licenciado sob a [MIT License](https://opensource.org/licenses/MIT).
-
+**Stack:** Python · pandas · scikit-learn · imbalanced-learn · Matplotlib · Seaborn
